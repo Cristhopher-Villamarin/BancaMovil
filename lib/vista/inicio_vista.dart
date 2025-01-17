@@ -1,186 +1,230 @@
 import 'package:flutter/material.dart';
-import '../controlador/banca_controlador.dart';
+import 'package:intl/intl.dart';
 import 'transferir_dinero.dart';
 import 'pago_servicios.dart';
 import 'recargar_servicios.dart';
-import 'package:intl/intl.dart';
 
 class InicioVista extends StatelessWidget {
-  final BancaControlador _bancaControlador = BancaControlador();
+  final String usuarioNombre = "Usuario Ejemplo";
+  final String usuarioCorreo = "usuario@gmail.com";
+  final double saldoDisponible = 1906.04;
 
   @override
   Widget build(BuildContext context) {
-    final usuario = _bancaControlador.obtenerUsuario();
-    final String fechaActual = DateFormat('d MMMM yyyy').format(DateTime.now());
-    final String horaActual = DateFormat('HH:mm').format(DateTime.now());
+    final String fechaActual =
+    DateFormat('d/MM/yyyy').format(DateTime.now());
+    final String horaActual =
+    DateFormat('HH:mm:ss').format(DateTime.now());
 
-    return Scaffold(
-      appBar: AppBar(title: Text('Banca Móvil')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(usuario.nombre),
-              accountEmail: Text(usuario.correo),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 50, color: Colors.deepOrange),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0A0A23), // Color de fondo personalizado
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A23),
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.tealAccent, // Cambia el color del ícono de menú hamburguesa
+          ),
+          title: Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage('asset/imag/Innova.png'),
               ),
+              SizedBox(width: 8),
+              Text(
+                'Innova ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Bank',
+                style: TextStyle(
+                  color: Colors.tealAccent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search, color: Colors.tealAccent),
             ),
-            ListTile(
-              leading: Icon(Icons.lock),
-              title: Text('Cambiar Contraseña'),
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    final TextEditingController _actualController = TextEditingController();
-                    final TextEditingController _nuevaController = TextEditingController();
-                    return AlertDialog(
-                      title: Text('Cambiar Contraseña'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.notifications, color: Colors.white),
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          backgroundColor: const Color(0xFF0A0A23),
+          child: ListView(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(color: Colors.black),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 50,
+                        color: Colors.tealAccent,
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextField(
-                            controller: _actualController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              labelText: 'Digite contraseña actual',
+                          Text(
+                            usuarioNombre,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 10),
-                          TextField(
-                            controller: _nuevaController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              labelText: 'Digite contraseña nueva',
+                          Text(
+                            usuarioCorreo,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
                             ),
                           ),
                         ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            _bancaControlador.cambiarContrasena(
-                              _actualController.text,
-                              _nuevaController.text,
-                            );
-                            Navigator.pop(context);
-                          },
-                          child: Text('Aceptar'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('Cancelar'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Cerrar Sesión'),
-              onTap: () {
-                _bancaControlador.cerrarSesion();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Hola, Cristhopher',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 4),
-            Text('Último Ingreso: $fechaActual / $horaActual',
-                style: TextStyle(fontSize: 14, color: Colors.grey)),
-            SizedBox(height: 16),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Mi Cuenta Principal',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 8),
-                    Text('Nro. ********1104', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 16),
-                    Text('Saldo Disponible', style: TextStyle(fontSize: 14, color: Colors.grey)),
-                    SizedBox(height: 4),
-                    Text('\$1906.04',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
+              ListTile(
+                leading: Icon(Icons.lock, color: Colors.white),
+                title: Text(
+                  'Cambiar Contraseña',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app, color: Colors.white),
+                title: Text(
+                  'Cerrar Sesión',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {},
+              ),
+              Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Versión 1.0.0",
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TransferirDineroVista()),
-                    );
-                  },
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '¡Hola, $usuarioNombre! 👋',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text('Transferir Dinero', style: TextStyle(fontSize: 10))
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.payment),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PagoServiciosVista()),
-                    );
-                  },
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Último ingreso: $fechaActual / $horaActual',
+                style: TextStyle(
+                  color: Colors.tealAccent,
+                  fontSize: 14,
                 ),
-                Text('Pago Servicios', style: TextStyle(fontSize: 10))
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RecargarServiciosVista()),
-                    );
-                  },
+              ),
+              SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.tealAccent, Colors.blueAccent],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                Text('Recargar Servicios', style: TextStyle(fontSize: 10))
-              ],
-            ),
-          ],
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Mi Cuenta Principal',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Nro. ********1104',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Saldo Disponible',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      '\$${saldoDisponible.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              TabBar(
+                labelColor: Colors.tealAccent,
+                unselectedLabelColor: Colors.grey,
+                indicatorColor: Colors.tealAccent,
+                tabs: [
+                  Tab(text: 'Transferir'),
+                  Tab(text: 'Servicios'),
+                  Tab(text: 'Recargas'),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    TransferirDineroVista(),
+                    PagoServiciosVista(),
+                    RecargarServiciosVista(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
