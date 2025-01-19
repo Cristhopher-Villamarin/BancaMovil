@@ -3,7 +3,7 @@ import '../modelo/banca_modelo.dart';
 class BancaControlador {
   BancaModelo obtenerUsuario() {
     // Datos simulados del usuario
-    return BancaModelo(nombre: 'Usuario Ejemplo', correo: 'usuario@gmail.com');
+    return BancaModelo(nombre: 'Carlos', correo: 'carlos@gmail.com');
   }
 
   void cambiarContrasena(String actual, String nueva) {
